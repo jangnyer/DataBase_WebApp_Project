@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ app_title }} - Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">{{ app_title }}</div>
+      <nav class="nav">
+        <a class="navlink active" href="/">Dashboard</a>
+        <a class="navlink" href="/contents">Contents</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid4">
+      <div class="card">
+        <div class="label">총 콘텐츠</div>
+        <div class="value">{{ total_contents }}</div>
+      </div>
+      <div class="card">
+        <div class="label">총 업로드(플랫폼 합)</div>
+        <div class="value">{{ total_uploads }}</div>
+      </div>
+      <div class="card">
+        <div class="label">협찬 콘텐츠</div>
+        <div class="value">{{ sponsored_cnt }}</div>
+      </div>
+      <div class="card">
+        <div class="label">총 조회수(업로드된 것만)</div>
+        <div class="value">{{ total_views }}</div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="panel">
+        <h2>플랫폼별 업로드 수</h2>
+        <table class="table">
+          <thead><tr><th>플랫폼</th><th class="right">업로드 수</th></tr></thead>
+          <tbody>
+            {% for r in platform_uploads %}
+            <tr>
+              <td>{{ r["name"] }}</td>
+              <td class="right">{{ r["uploaded_count"] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>키워드 TOP 10</h2>
+        <table class="table">
+          <thead><tr><th>키워드</th><th class="right">개수</th></tr></thead>
+          <tbody>
+            {% for r in top_keywords %}
+            <tr>
+              <td>{{ r["keyword"] }}</td>
+              <td class="right">{{ r["cnt"] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>최근 업로드 10개</h2>
+      <table class="table">
+        <thead><tr><th>제목</th><th>플랫폼</th><th>업로드 날짜</th><th class="right">조회수</th></tr></thead>
+        <tbody>
+          {% for r in recent_uploads %}
+          <tr>
+            <td>{{ r["title"] }}</td>
+            <td>{{ r["platform"] }}</td>
+            <td>{{ r["upload_date"] }}</td>
+            <td class="right">{{ r["views"] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
