@@ -44,3 +44,5 @@ CREATE TABLE content_keyword (
   FOREIGN KEY (content_id) REFERENCES contents(content_id),
   FOREIGN KEY (keyword_id) REFERENCES keywords(keyword_id)
 );
+
+
