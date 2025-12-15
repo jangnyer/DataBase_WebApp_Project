@@ -16,7 +16,6 @@ def parse_keywords(s: str):
         return []
     parts = [x.strip() for x in s.split(",")]
     parts = [x for x in parts if x]
-    # 중복 제거(순서 유지)
     seen = set()
     out = []
     for x in parts:
@@ -27,18 +26,13 @@ def parse_keywords(s: str):
 
 def set_keywords(con, content_id: int, keywords_list):
     cur = con.cursor()
-    # 기존 매핑 삭제
     cur.execute("DELETE FROM content_keyword WHERE content_id=?", (content_id,))
-    # keywords upsert + 매핑 insert
     for kw in keywords_list:
         cur.execute("INSERT OR IGNORE INTO keywords(keyword) VALUES (?)", (kw,))
         kid = cur.execute("SELECT keyword_id FROM keywords WHERE keyword=?", (kw,)).fetchone()["keyword_id"]
         cur.execute("INSERT OR IGNORE INTO content_keyword(content_id, keyword_id) VALUES (?,?)", (content_id, kid))
 
 def ensure_platform_rows(con, content_id: int):
-    """
-    새 콘텐츠 생성 시 platforms 개수만큼 content_platform 기본 row를 만들어둠.
-    """
     cur = con.cursor()
     platforms = cur.execute("SELECT platform_id FROM platforms").fetchall()
     for p in platforms:

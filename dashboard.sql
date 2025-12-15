@@ -27,7 +27,6 @@ ORDER BY cp.upload_date DESC;
 
 
 -- 키워드별 콘텐츠 개수 TOP
-
 SELECT k.keyword, COUNT(*) AS cnt
 FROM content_keyword ck
 JOIN keywords k ON k.keyword_id = ck.keyword_id
@@ -36,7 +35,7 @@ ORDER BY cnt DESC
 LIMIT 10;
 
 
--- 조회수 TOP (플랫폼별 or 전체)
+-- 조회수 TOP 
 SELECT c.title, p.name, cp.views
 FROM content_platform cp
 JOIN contents c ON c.content_id = cp.content_id

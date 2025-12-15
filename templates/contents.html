@@ -52,7 +52,7 @@
         <a class="btn ghost" href="/contents">초기화</a>
       </form>
 
-      <div class="hint">✅ 이 화면에서 검색(READ) + 추가(CREATE) + 수정(UPDATE) + 삭제(DELETE) 시연 가능</div>
+
 
       <table class="table">
         <thead>
@@ -80,7 +80,7 @@
             <td class="nowrap">
               <a class="btn sm" href="/contents/{{ r['content_id'] }}/edit">수정</a>
               <form method="post" action="/contents/{{ r['content_id'] }}/delete" style="display:inline"
-                    onsubmit="return confirm('정말 삭제할까? (ID {{ r['content_id'] }})');">
+                    onsubmit="return confirm('정말 삭제할까요? ');">
                 <button class="btn sm danger" type="submit">삭제</button>
               </form>
             </td>

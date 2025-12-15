@@ -1,9 +1,4 @@
--- seed.sql (SQLite)
--- 숏폼 마케팅 대시보드 샘플 데이터 (20개 콘텐츠 + 플랫폼/키워드/업로드/조회수)
--- 실행 예시:
---   sqlite3 shortform.db < seed.sql
--- 또는 sqlite3 실행 후:
---   .read seed.sql
+
 
 PRAGMA foreign_keys = ON;
 
@@ -13,7 +8,6 @@ DROP TABLE IF EXISTS keywords;
 DROP TABLE IF EXISTS platforms;
 DROP TABLE IF EXISTS contents;
 
--- ===== 테이블 생성 =====
 CREATE TABLE contents (
   content_id INTEGER PRIMARY KEY AUTOINCREMENT,
   plan_done INTEGER NOT NULL DEFAULT 0,
@@ -56,14 +50,14 @@ CREATE TABLE content_keyword (
   FOREIGN KEY (keyword_id) REFERENCES keywords(keyword_id)
 );
 
--- ===== 플랫폼 4개 =====
-INSERT INTO platforms(platform_id, name) VALUES
-(1, 'YouTube Shorts'),
-(2, 'TikTok'),
-(3, 'Instagram Reels'),
-(4, 'Xiaohongshu');
 
--- ===== 키워드(24개) =====
+INSERT INTO platforms(platform_id, name) VALUES
+(1, '유튜브'),
+(2, '틱톡'),
+(3, '인스타그램'),
+(4, '샤오홍슈');
+
+
 INSERT INTO keywords(keyword_id, keyword) VALUES
 (1,'저당'),
 (2,'다이어트'),
@@ -90,8 +84,6 @@ INSERT INTO keywords(keyword_id, keyword) VALUES
 (23,'대시보드'),
 (24,'마케팅');
 
--- ===== 콘텐츠 20개 =====
--- 컨셉: 저당/혈당/레시피 + 지역 리뷰/브이로그 + 마케팅 팁(대시보드용)
 INSERT INTO contents(content_id, plan_done, plan_date, title, description, script, thumbnail_concept, sponsored) VALUES
 (1, 1, '2025-11-02', '저당 파운드케이크 20분 컷', '계란+아몬드가루+알룰로스로 만드는 초간단 저당 파운드. 에어프라이어 한 번에 끝.', '오프닝: 외계인 안경 ON. 오늘은 저당 파운드케이크! 재료 5개만. 20분 뒤 바로 먹는다.', '완성샷 클로즈업 + “20분” 큰 글자', 0),
 (2, 1, '2025-11-05', '혈당 스파이크 줄이는 아침 루틴', '아침에 이것만 바꿔도 혈당이 달라진다. 3단계 루틴 정리.', '아침 루틴 1) 물 2) 단백질 3) 10분 산책. 순서가 포인트!', '3단계 체크리스트 썸네일', 0),
