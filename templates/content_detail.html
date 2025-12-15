@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ app_title }} - Detail</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">{{ app_title }}</div>
+      <nav class="nav">
+        <a class="navlink" href="/">Dashboard</a>
+        <a class="navlink active" href="/contents">Contents</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="titlebar">
+        <h2>콘텐츠 상세 (ID {{ content["content_id"] }})</h2>
+        <div class="actions">
+          <a class="btn" href="/contents/{{ content['content_id'] }}/edit">수정</a>
+          <a class="btn ghost" href="/contents">목록</a>
+        </div>
+      </div>
+
+      <div class="kv">
+        <div class="k">제목</div><div class="v"><b>{{ content["title"] }}</b></div>
+        <div class="k">기획</div><div class="v">{{ "완료" if content["plan_done"]==1 else "미완료" }}</div>
+        <div class="k">기획일</div><div class="v mono">{{ content["plan_date"] or "-" }}</div>
+        <div class="k">협찬</div><div class="v">{{ "협찬" if content["sponsored"]==1 else "-" }}</div>
+        <div class="k">썸네일</div><div class="v">{{ content["thumbnail_concept"] or "-" }}</div>
+        <div class="k">키워드</div>
+        <div class="v">
+          {% if keywords|length == 0 %}-{% else %}
+            {% for kw in keywords %}<span class="chip">{{ kw["keyword"] }}</span>{% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <hr class="hr" />
+
+      <h3 class="h3">설명문</h3>
+      <div class="box mono">{{ content["description"] or "-" }}</div>
+
+      <h3 class="h3" style="margin-top:14px;">대본</h3>
+      <div class="box mono pre">{{ content["script"] or "-" }}</div>
+
+      <hr class="hr" />
+
+      <h3 class="h3">플랫폼 업로드 정보</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>플랫폼</th>
+            <th>업로드</th>
+            <th>업로드 날짜</th>
+            <th>업로드 URL</th>
+            <th class="right">조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in platforms %}
+          <tr>
+            <td>{{ p["name"] }}</td>
+            <td>{{ "YES" if p["is_uploaded"]==1 else "NO" }}</td>
+            <td class="mono">{{ p["upload_date"] or "-" }}</td>
+            <td class="mono">{{ p["upload_url"] or "-" }}</td>
+            <td class="right mono">{{ p["views"] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

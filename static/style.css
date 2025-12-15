@@ -54,3 +54,12 @@ a { color: inherit; text-decoration: none; }
 .h3 { margin: 0 0 8px; font-size: 14px; }
 .actions { display:flex; gap:10px; margin-top: 14px; }
 
+
+
+.kv { display:grid; grid-template-columns: 120px 1fr; gap: 8px 12px; margin-top: 10px; }
+.kv .k { opacity:.7; font-size: 12px; }
+.kv .v { }
+.chip { display:inline-block; padding: 6px 10px; border-radius: 999px; margin: 0 6px 6px 0;
+        background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.12); font-size: 12px; }
+.box { padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.22); }
+.box.pre { white-space: pre-wrap; line-height: 1.5; }

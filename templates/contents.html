@@ -52,8 +52,6 @@
         <a class="btn ghost" href="/contents">초기화</a>
       </form>
 
-
-
       <table class="table">
         <thead>
           <tr>
@@ -67,6 +65,7 @@
             <th>작업</th>
           </tr>
         </thead>
+
         <tbody>
           {% for r in rows %}
           <tr>
@@ -77,10 +76,15 @@
             <td>{{ "협찬" if r["sponsored"]==1 else "-" }}</td>
             <td>{{ r["uploaded_platforms"] }}</td>
             <td>{{ r["keywords"] }}</td>
+
             <td class="nowrap">
+              <a class="btn sm" href="/contents/{{ r['content_id'] }}">보기</a>
               <a class="btn sm" href="/contents/{{ r['content_id'] }}/edit">수정</a>
-              <form method="post" action="/contents/{{ r['content_id'] }}/delete" style="display:inline"
-                    onsubmit="return confirm('정말 삭제할까요? ');">
+
+              <form method="post"
+                    action="/contents/{{ r['content_id'] }}/delete"
+                    style="display:inline"
+                    onsubmit="return confirm('정말 삭제할까요? (ID {{ r['content_id'] }})');">
                 <button class="btn sm danger" type="submit">삭제</button>
               </form>
             </td>

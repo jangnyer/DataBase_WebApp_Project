@@ -182,9 +182,8 @@ def contents():
         q=q, platform=platform, uploaded=uploaded, sponsored=sponsored
     )
 
-# -----------------------------
-# CREATE (추가)
-# -----------------------------
+
+# CREATE 
 @app.route("/contents/new", methods=["GET", "POST"])
 def content_new():
     con = get_db()
@@ -220,7 +219,7 @@ def content_new():
         """, (plan_done, plan_date, title, description, script, thumbnail_concept, sponsored))
         content_id = cur.lastrowid
 
-        # 플랫폼 기본 row 생성 + 폼 값 반영
+ 
         ensure_platform_rows(con, content_id)
         for p in platform_rows:
             pid = p["platform_id"]
@@ -259,9 +258,7 @@ def content_new():
         error=None
     )
 
-# -----------------------------
-# UPDATE (수정)
-# -----------------------------
+# UPDATE
 @app.route("/contents/<int:content_id>/edit", methods=["GET", "POST"])
 def content_edit(content_id: int):
     con = get_db()
@@ -351,9 +348,8 @@ def content_edit(content_id: int):
         error=None
     )
 
-# -----------------------------
-# DELETE (삭제)
-# -----------------------------
+# 삭제
+
 @app.route("/contents/<int:content_id>/delete", methods=["POST"])
 def content_delete(content_id: int):
     con = get_db()
@@ -364,7 +360,6 @@ def content_delete(content_id: int):
         con.close()
         abort(404)
 
-    # 연관 테이블 먼저 삭제
     cur.execute("DELETE FROM content_platform WHERE content_id=?", (content_id,))
     cur.execute("DELETE FROM content_keyword WHERE content_id=?", (content_id,))
     cur.execute("DELETE FROM contents WHERE content_id=?", (content_id,))
@@ -373,5 +368,42 @@ def content_delete(content_id: int):
     con.close()
     return redirect(url_for("contents"))
 
+@app.route("/contents/<int:content_id>")
+def content_detail(content_id: int):
+    con = get_db()
+    cur = con.cursor()
+
+    content = cur.execute("SELECT * FROM contents WHERE content_id=?", (content_id,)).fetchone()
+    if not content:
+        con.close()
+        abort(404)
+
+    platforms = cur.execute("""
+        SELECT p.name, cp.is_uploaded, cp.upload_date, cp.upload_url, COALESCE(cp.views,0) AS views
+        FROM platforms p
+        LEFT JOIN content_platform cp
+          ON cp.platform_id = p.platform_id AND cp.content_id = ?
+        ORDER BY p.name
+    """, (content_id,)).fetchall()
+
+    keywords = cur.execute("""
+        SELECT k.keyword
+        FROM content_keyword ck
+        JOIN keywords k ON k.keyword_id = ck.keyword_id
+        WHERE ck.content_id=?
+        ORDER BY k.keyword
+    """, (content_id,)).fetchall()
+
+    con.close()
+    return render_template(
+        "content_detail.html",
+        app_title=APP_TITLE,
+        content=content,
+        platforms=platforms,
+        keywords=keywords
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
