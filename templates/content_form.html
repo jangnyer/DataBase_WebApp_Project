@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ app_title }} - {% if mode=='new' %}New{% else %}Edit{% endif %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="brand">{{ app_title }}</div>
+      <nav class="nav">
+        <a class="navlink" href="/">Dashboard</a>
+        <a class="navlink active" href="/contents">Contents</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel">
+      <h2>{% if mode=='new' %}콘텐츠 추가{% else %}콘텐츠 수정 (ID {{ content['content_id'] }}){% endif %}</h2>
+
+      {% if error %}
+        <div class="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="post" class="form">
+        <div class="row">
+          <label class="lbl">제목 *</label>
+          <input class="input" name="title" value="{{ (content['title'] if content else '') }}" placeholder="예: 저당 파운드 케이크" />
+        </div>
+
+        <div class="grid2">
+          <div class="row">
+            <label class="lbl">기획 완료</label>
+            <select class="select" name="plan_done">
+              {% set v = (content['plan_done'] if content else 0) %}
+              <option value="0" {% if v==0 %}selected{% endif %}>미완료</option>
+              <option value="1" {% if v==1 %}selected{% endif %}>완료</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label class="lbl">기획일 (YYYY-MM-DD)</label>
+            <input class="input mono" name="plan_date" value="{{ (content['plan_date'] if content else '') }}" placeholder="2025-12-15" />
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="row">
+            <label class="lbl">협찬 여부</label>
+            {% set s = (content['sponsored'] if content else 0) %}
+            <select class="select" name="sponsored">
+              <option value="0" {% if s==0 %}selected{% endif %}>비협찬</option>
+              <option value="1" {% if s==1 %}selected{% endif %}>협찬</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label class="lbl">썸네일 콘셉트</label>
+            <input class="input" name="thumbnail_concept" value="{{ (content['thumbnail_concept'] if content else '') }}" placeholder="예: 큰 글씨 + 전/후 비교" />
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="lbl">키워드 (쉼표로 구분)</label>
+          <input class="input" name="keywords" value="{{ keyword_text }}" placeholder="저당, 다이어트, 숏폼, 레시피" />
+        </div>
+
+        <div class="row">
+          <label class="lbl">설명문</label>
+          <textarea class="textarea" name="description" rows="4" placeholder="짧게 요약">{{ (content['description'] if content and content['description'] else '') }}</textarea>
+        </div>
+
+        <div class="row">
+          <label class="lbl">대본</label>
+          <textarea class="textarea" name="script" rows="6" placeholder="대본 내용">{{ (content['script'] if content and content['script'] else '') }}</textarea>
+        </div>
+
+        <hr class="hr" />
+
+        <h3 class="h3">플랫폼 업로드 정보</h3>
+        <div class="hint">※ 과제용이라 여기까지 하면 “DB 변경/저장”이 확실히 보임</div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>플랫폼</th>
+              <th>업로드</th>
+              <th>업로드 날짜</th>
+              <th>업로드 URL</th>
+              <th class="right">조회수</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in platforms %}
+              {% set d = platform_data.get(p['platform_id']) %}
+              <tr>
+                <td>{{ p['name'] }}</td>
+                <td>
+                  <input type="checkbox" name="pl_{{ p['platform_id'] }}_uploaded"
+                    {% if d and d['is_uploaded']==1 %}checked{% endif %}>
+                </td>
+                <td>
+                  <input class="input mono" name="pl_{{ p['platform_id'] }}_date"
+                         value="{{ (d['upload_date'] if d and d['upload_date'] else '') }}"
+                         placeholder="2025-12-15">
+                </td>
+                <td>
+                  <input class="input" name="pl_{{ p['platform_id'] }}_url"
+                         value="{{ (d['upload_url'] if d and d['upload_url'] else '') }}"
+                         placeholder="https://...">
+                </td>
+                <td class="right">
+                  <input class="input mono" name="pl_{{ p['platform_id'] }}_views"
+                         value="{{ (d['views'] if d else 0) }}"
+                         style="max-width:120px; text-align:right;">
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="actions">
+          <button class="btn" type="submit">저장</button>
+          <a class="btn ghost" href="/contents">취소</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

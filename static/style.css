@@ -40,3 +40,17 @@ a { color: inherit; text-decoration: none; }
   .grid4 { grid-template-columns: repeat(2, 1fr); }
   .grid2 { grid-template-columns: 1fr; }
 }
+
+
+.titlebar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 8px; }
+.nowrap { white-space: nowrap; }
+.btn.sm { padding: 7px 10px; border-radius: 10px; font-size: 12px; }
+.btn.danger { border-color: rgba(255,90,90,0.35); background: rgba(255,90,90,0.12); }
+.alert { margin: 10px 0; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,90,90,0.35); background: rgba(255,90,90,0.10); }
+.form .row { margin: 10px 0; }
+.lbl { display:block; margin: 0 0 6px; font-size: 12px; opacity: .8; }
+.textarea { width: 100%; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); color:#e6edf3; border-radius: 12px; padding: 10px 12px; }
+.hr { border: none; border-top: 1px solid rgba(255,255,255,0.10); margin: 16px 0; }
+.h3 { margin: 0 0 8px; font-size: 14px; }
+.actions { display:flex; gap:10px; margin-top: 14px; }
+

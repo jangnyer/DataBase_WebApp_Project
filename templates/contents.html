@@ -19,7 +19,10 @@
 
   <main class="wrap">
     <section class="panel">
-      <h2>콘텐츠 목록</h2>
+      <div class="titlebar">
+        <h2>콘텐츠 목록</h2>
+        <a class="btn" href="/contents/new">+ 새 콘텐츠 추가</a>
+      </div>
 
       <form class="filters" method="get" action="/contents">
         <input class="input" name="q" value="{{ q }}" placeholder="제목 검색 (예: 저당, 조회수, 샤오홍슈)" />
@@ -49,7 +52,7 @@
         <a class="btn ghost" href="/contents">초기화</a>
       </form>
 
-
+      <div class="hint">✅ 이 화면에서 검색(READ) + 추가(CREATE) + 수정(UPDATE) + 삭제(DELETE) 시연 가능</div>
 
       <table class="table">
         <thead>
@@ -61,6 +64,7 @@
             <th>협찬</th>
             <th>업로드된 플랫폼</th>
             <th>키워드</th>
+            <th>작업</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +77,13 @@
             <td>{{ "협찬" if r["sponsored"]==1 else "-" }}</td>
             <td>{{ r["uploaded_platforms"] }}</td>
             <td>{{ r["keywords"] }}</td>
+            <td class="nowrap">
+              <a class="btn sm" href="/contents/{{ r['content_id'] }}/edit">수정</a>
+              <form method="post" action="/contents/{{ r['content_id'] }}/delete" style="display:inline"
+                    onsubmit="return confirm('정말 삭제할까? (ID {{ r['content_id'] }})');">
+                <button class="btn sm danger" type="submit">삭제</button>
+              </form>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -81,121 +92,3 @@
   </main>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ app_title }} - Contents</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <header class="topbar">
-    <div class="wrap">
-      <div class="brand">{{ app_title }}</div>
-      <nav class="nav">
-        <a class="navlink" href="/">Dashboard</a>
-        <a class="navlink active" href="/contents">Contents</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="wrap">
-    <section class="panel">
-      <h2>콘텐츠 목록</h2>
-
-      <form class="filters" method="get" action="/contents">
-        <input class="input" name="q" value="{{ q }}" placeholder="제목 검색 (예: 저당, 조회수, 샤오홍슈)" />
-
-        <select class="select" name="platform">
-          <option value="">플랫폼(전체)</option>
-          {% for p in platforms %}
-            <option value="{{ p['name'] }}" {% if platform==p['name'] %}selected{% endif %}>
-              {{ p['name'] }}
-            </option>
-          {% endfor %}
-        </select>
-
-        <select class="select" name="uploaded">
-          <option value="">업로드(전체)</option>
-          <option value="1" {% if uploaded=='1' %}selected{% endif %}>업로드 됨</option>
-          <option value="0" {% if uploaded=='0' %}selected{% endif %}>업로드 안 됨</option>
-        </select>
-
-        <select class="select" name="sponsored">
-          <option value="">협찬(전체)</option>
-          <option value="1" {% if sponsored=='1' %}selected{% endif %}>협찬</option>
-          <option value="0" {% if sponsored=='0' %}selected{% endif %}>비협찬</option>
-        </select>
-
-        <button class="btn" type="submit">필터 적용</button>
-        <a class="btn ghost" href="/contents">초기화</a>
-      </form>
-
-
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>제목</th>
-            <th>기획</th>
-            <th>기획일</th>
-            <th>협찬</th>
-            <th>업로드된 플랫폼</th>
-            <th>키워드</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for r in rows %}
-          <tr>
-            <td class="mono">{{ r["content_id"] }}</td>
-            <td>{{ r["title"] }}</td>
-            <td>{{ "완료" if r["plan_done"]==1 else "미완료" }}</td>
-            <td class="mono">{{ r["plan_date"] or "-" }}</td>
-            <td>{{ "협찬" if r["sponsored"]==1 else "-" }}</td>
-            <td>{{ r["uploaded_platforms"] }}</td>
-            <td>{{ r["keywords"] }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </section>
-  </main>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
